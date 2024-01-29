@@ -31,6 +31,20 @@ async function run() {
         const articleCollection = client.db("SahaReno").collection("Article");
         const educationCollection = client.db("SahaReno").collection("Education");
         const experienceCollection = client.db("SahaReno").collection("Experience");
+        const messageCollection = client.db("SahaReno").collection("Message");
+
+        app.post('/message', async (req, res) => {
+            const review = req.body;
+            const c = await messageCollection.insertOne(review);
+            res.send(c);
+        });
+        app.get('/message', async (req, res) => {
+            let query = {};
+            const cursor = messageCollection.find(query).sort({ _id: -1 }).limit(0);
+            const a = await cursor.toArray();
+            res.send(a);
+        });
+
 
         // Experience PART ------------------------------------------------------------------------------
         app.post('/experience', async (req, res) => {
@@ -102,7 +116,7 @@ async function run() {
         });
         app.get('/article', async (req, res) => {
             let query = {};
-            const cursor = articleCollection.find(query).limit(0);
+            const cursor = articleCollection.find(query).sort({ _id: -1 }).limit(0);
             const a = await cursor.toArray();
             res.send(a);
         });
@@ -165,7 +179,7 @@ async function run() {
         });
         app.get('/certificates', async (req, res) => {
             let query = {};
-            const cursor = certificateCollection.find(query).limit(0);
+            const cursor = certificateCollection.find(query).sort({ _id: -1 }).limit(0);
             const a = await cursor.toArray();
             res.send(a);
         });
